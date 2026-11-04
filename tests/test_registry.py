@@ -93,3 +93,25 @@ async def test_health_all_survives_exploding_provider() -> None:
     results = await ProviderRegistry([Boom()]).health_all()
 
     assert results[0][1].status is HealthStatus.DOWN
+
+
+async def test_override_is_a_pin_and_never_falls_back() -> None:
+    """Pinli saglayici dusukse sessiz fallback YOK: deney gecersiz olmasin."""
+    pinned = FakeProvider("pexels", status=HealthStatus.DOWN, priority=10)
+    healthy = FakeProvider("local", status=HealthStatus.OK, priority=20)
+    registry = ProviderRegistry([pinned, healthy], overrides={Capability.IMAGE: "pexels"})
+
+    with pytest.raises(NoProviderAvailable) as excinfo:
+        await registry.resolve(Capability.IMAGE)
+
+    assert "(pinli)" in excinfo.value.rejected
+    assert healthy.calls == 0  # yedek saglayici hic denenmedi
+
+
+async def test_pin_removed_when_env_cleared() -> None:
+    pinned = FakeProvider("pexels", status=HealthStatus.DOWN, priority=10)
+    healthy = FakeProvider("local", status=HealthStatus.OK, priority=20)
+
+    provider, _ = await ProviderRegistry([pinned, healthy]).resolve(Capability.IMAGE)
+
+    assert provider.name == "local"

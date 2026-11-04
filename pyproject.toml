@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shortforge"
-version = "0.1.0"
+version = "0.1.1"
 description = "Ucretsiz katmanlarla dikey YouTube Shorts uretimi + denetimli (private -> onay -> public) yayin hatti"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -27,6 +27,7 @@ dev = [
   "pytest==8.3.4",
   "pytest-asyncio==0.25.0",
   "respx==0.22.0",
+  "pytest-cov==6.0.0",
   "ruff==0.8.4",
   "mypy==1.14.0",
   "pre-commit==4.0.1",
@@ -61,5 +62,8 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-addopts = "-m 'not live' --strict-markers"
+addopts = """
+-m "not live" --strict-markers
+--cov=shortforge --cov-report=term-missing:skip-covered --cov-fail-under=80
+"""
 markers = ["live: aga cikan testler (varsayilan olarak kapali)"]

@@ -64,11 +64,11 @@ class YouTubeProvider(BaseProvider):
 
     def preflight_upload(self, ledger: QuotaLedger) -> None:
         """Yukleme oncesi kota kapisi - atlanamaz."""
-        ledger.assert_can_afford(self.name, UPLOAD_UNITS)
+        ledger.assert_can_afford(self.name, UPLOAD_UNITS, "upload")
 
     def preflight_publish(self, ledger: QuotaLedger) -> None:
         """Public'e alma oncesi kota kapisi."""
-        ledger.assert_can_afford(self.name, UPDATE_UNITS)
+        ledger.assert_can_afford(self.name, UPDATE_UNITS, "update")
 
 
 __all__ = ["QuotaExceeded", "YouTubeProvider"]

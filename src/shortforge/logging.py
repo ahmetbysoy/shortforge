@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import re
+import sys
 from collections.abc import Iterable, MutableMapping
 from typing import Any
 
@@ -79,6 +80,7 @@ def configure_logging(level: str = "INFO", *, json_output: bool = False) -> None
     else:
         processors.append(structlog.dev.ConsoleRenderer(colors=True))
     structlog.configure(
+        logger_factory=structlog.PrintLoggerFactory(file=sys.stderr),
         processors=processors,
         wrapper_class=structlog.make_filtering_bound_logger(
             getattr(logging, level.upper(), logging.INFO)

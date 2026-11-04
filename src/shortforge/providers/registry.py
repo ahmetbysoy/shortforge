@@ -48,21 +48,26 @@ class ProviderRegistry:
         return [p for bucket in self._by_capability.values() for p in bucket]
 
     def candidates(self, capability: Capability) -> list[BaseProvider]:
-        """Override verildiyse o saglayici basa alinir (elenmez, ilk denenir)."""
+        """Override bir *pin*dir: yalniz o saglayici denenir, sessiz fallback yapilmaz.
+
+        Gerekce: bir saglayiciyi elle sabitlediysen (or. maliyet/kalite testi)
+        sistemin kendiliginden baskasina kaymasi deneyi gecersiz kilar. Pin'i
+        kaldirmak icin env degiskenini bosalt.
+        """
         bucket = list(self._by_capability.get(capability, []))
         override = self._overrides.get(capability)
-        if override:
-            matching = [p for p in bucket if p.name == override]
-            if not matching:
-                log.warning(
-                    "registry.override_unknown",
-                    capability=capability.value,
-                    override=override,
-                    available=[p.name for p in bucket],
-                )
-            else:
-                bucket = matching + [p for p in bucket if p.name != override]
-        return bucket
+        if not override:
+            return bucket
+        matching = [p for p in bucket if p.name == override]
+        if not matching:
+            log.warning(
+                "registry.override_unknown",
+                capability=capability.value,
+                override=override,
+                available=[p.name for p in bucket],
+            )
+            return bucket
+        return matching
 
     async def health_all(self) -> list[tuple[BaseProvider, Health]]:
         providers = self.all_providers()
@@ -83,6 +88,7 @@ class ProviderRegistry:
     async def resolve(self, capability: Capability) -> tuple[BaseProvider, Health]:
         """Kullanilabilir ilk saglayiciyi dondurur; hicbiri yoksa NoProviderAvailable."""
         candidates = self.candidates(capability)
+        override = self._overrides.get(capability)
         rejected: dict[str, str] = {}
         for provider in candidates:
             health = await provider.health()
@@ -96,6 +102,14 @@ class ProviderRegistry:
                 )
                 return provider, health
             rejected[provider.name] = f"{health.status.value}: {health.detail}"
+        if override and rejected:
+            rejected = {
+                "(pinli)": (
+                    f"{override} kullanilamiyor ve override pinli oldugu icin "
+                    "sessiz fallback yapilmaz - env degiskenini bosalt"
+                ),
+                **rejected,
+            }
         raise NoProviderAvailable(capability.value, rejected)
 
 

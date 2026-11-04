@@ -2,6 +2,26 @@
 
 Her satir: **karar — gerekce — risk**. Yeni kararlar en uste eklenir.
 
+## P0.5 (2026-11-04) — ajan raporu denetimi ve birles.
+
+11. **Kota defterine `action` kolonu** (kabul) — "yukleme = birim/1600" turetimi kapak/guncelleme
+    birimleriyle yanlis sayiyordu. Artik `(date_pt, provider, action)` PK'si ve ayri yukleme sayaci.
+12. **Birim tavani ve islem tavani bagimsiz** (kabul) — YouTube 10.000 birim/gun API kotasi;
+    6 yukleme/gun ayri bir kural. 6x1600=9600 gibi turetilmis tavan yanlisti, kaldirildi.
+13. **Sifirlanma suresinde UTC normalizasyonu** (kabul) — ayni tzinfo'lu aware datetime farki
+    duvar saatiyle hesaplanir; DST gunlerinde 1 saat kayar. `_as_utc()` + 4 DST testi.
+14. **Override = pin** (davranis degisikligi) — pinli saglayici dusukse sessiz fallback YOK.
+    Gerekce: sabitlenen saglayici dusunce baskasina kaymak olcumu gecersiz kilar.
+15. **Tek env adi, cift ad reddedildi** — `GEMINI_API_KEY` ve `SHORTFORGE_GEMINI_API_KEY`
+    birlikte kabul edilmez; hangi degerin kazandigi belirsizligi yanlis anahtarin sessizce
+    kullanilmasina yol acar. GitHub Secrets adlari ciplak addir.
+16. **Kaynak kod ASCII, dokumanlar Turkce** — ruff RUF001-003 kapatilmaz. String'ler FFmpeg
+    filtre argumani, .ass altyazi ve YouTube metadata'sina gidiyor; `i/İ/s` karakterlerinde
+    ASS/font/konsol kodlamasi Kirilma riski tasir. Estetik degil, kirilganlik karari.
+17. **Kapsam esigi %80 kilitli** (`--cov-fail-under=80`, su an %95.4) — olculmeyen kapsam iddiadir.
+18. **`--strict` yalniz bugun uretimi durduran yetenegi denetler** (gorsel). P2'de `tts` eklenir;
+    bilincli DOWN olan bir saglayici yuzunden CI'i surekli kirmizi tutmak alarm yorgunlugu yaratir.
+
 ## P0 (2026-11-04)
 
 1. **Render icin MoviePy degil FFmpeg filtre zinciri** — 1.9 GB RAM'de MoviePy kareleri

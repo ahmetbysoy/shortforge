@@ -1,6 +1,8 @@
 # P0 RAPORU — İskelet, sağlayıcı katmanı, kota defteri
 
-**Tarih:** 2026-11-04 · **Sürüm:** 0.1.0 · **Durum:** ✅ tamam (CI yeşil)
+**Tarih:** 2026-11-04 · **Sürüm:** 0.1.0 → 0.1.1 · **Durum:** ✅ tamam (CI yeşil)
+
+> P0.5 sertleştirmesi ve ajan raporu denetimi için: [`P0.5-BIRLESTIRME.md`](P0.5-BIRLESTIRME.md)
 
 ## 1. Kurulum
 - Python **3.13.16**, `pip install -e ".[dev]"` tek komutla temiz.

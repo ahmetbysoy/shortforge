@@ -15,6 +15,7 @@ Senaryo (Gemini free)  →  Ses (edge-tts → Piper)  →  Görsel (Pollinations
 | Aşama | Kapsam | Durum |
 |---|---|---|
 | **P0** | iskelet, sağlayıcı katmanı, kota defteri, `doctor`, CI | ✅ tamam |
+| **P0.5** | iki P0 birleştirme + kota/kapsam sertleştirme | ✅ tamam |
 | P1 | senaryo şeması + LLM üretimi + hook | ⏳ |
 | P2 | TTS + kelime senkron altyazı | ⏳ |
 | P3 | görsel + Ken Burns + render | ⏳ |
@@ -32,6 +33,7 @@ cd shortforge
 
 python3 -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
+pre-commit install            # ilk kurulumda bir kez
 cp .env.example .env          # anahtarları doldur (hiçbiri zorunlu değil)
 
 shortforge doctor             # sağlayıcı + kota + ortam raporu
@@ -63,8 +65,11 @@ make test         # ağa çıkmayan unit testler
 make test-live    # gerçek ağ testleri (kapalı)
 make lint type    # ruff + mypy strict
 make schema       # docs/schemas/script.schema.json üret
-make check        # CI ile aynı kontroller
+make check        # CI ile aynı kontroller (ruff + mypy + pytest + kapsam eşiği)
 ```
+
+Kalite kapıları: `ruff` (format+lint), `mypy --strict`, `pytest` **%80 kapsam eşiği kilitli**
+(ölçülen: %95), sır taraması. Sürümler `requirements-lock.txt` ile sabit.
 
 ## Depo yapısı
 
