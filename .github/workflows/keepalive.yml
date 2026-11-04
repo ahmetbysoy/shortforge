@@ -1,0 +1,31 @@
+name: Keepalive
+
+# GitHub, 60 gun hareketsizlikte zamanlanmis workflow'lari devre disi birakir.
+# Uretim cron'u sessizce olmesin diye her 3 gunde bir kucuk bir commit atilir.
+
+on:
+  schedule:
+    - cron: "0 4 */3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tarih damgasi
+        run: |
+          mkdir -p state
+          date -u +"%Y-%m-%dT%H:%M:%SZ keepalive" >> state/keepalive.txt
+          tail -n 30 state/keepalive.txt > state/keepalive.tmp
+          mv state/keepalive.tmp state/keepalive.txt
+      - name: Commit
+        run: |
+          git config user.name "shortforge-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/keepalive.txt
+          git diff --cached --quiet || git commit -m "chore: keepalive"
+          git push

@@ -1,0 +1,137 @@
+{
+  "$defs": {
+    "Scene": {
+      "additionalProperties": false,
+      "description": "Tek bir sahne: anlati metni + gorsel istemi + hareket.",
+      "properties": {
+        "index": {
+          "maximum": 7,
+          "minimum": 1,
+          "title": "Index",
+          "type": "integer"
+        },
+        "narration": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Narration",
+          "type": "string"
+        },
+        "image_prompt": {
+          "maxLength": 500,
+          "minLength": 3,
+          "title": "Image Prompt",
+          "type": "string"
+        },
+        "motion": {
+          "default": "zoom_in",
+          "enum": [
+            "zoom_in",
+            "zoom_out",
+            "pan_left",
+            "pan_right",
+            "static"
+          ],
+          "title": "Motion",
+          "type": "string"
+        },
+        "duration_hint": {
+          "anyOf": [
+            {
+              "maximum": 20.0,
+              "minimum": 1.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Hint"
+        },
+        "source_note": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Note"
+        }
+      },
+      "required": [
+        "index",
+        "narration",
+        "image_prompt"
+      ],
+      "title": "Scene",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Video senaryosu: hook + 3-7 sahne + CTA + hashtag + kaynaklar.",
+  "properties": {
+    "topic": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Topic",
+      "type": "string"
+    },
+    "hook": {
+      "description": "Ilk 3 saniye kancasi",
+      "maxLength": 90,
+      "minLength": 5,
+      "title": "Hook",
+      "type": "string"
+    },
+    "scenes": {
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "maxItems": 7,
+      "minItems": 3,
+      "title": "Scenes",
+      "type": "array"
+    },
+    "cta": {
+      "default": "",
+      "maxLength": 120,
+      "title": "Cta",
+      "type": "string"
+    },
+    "hashtags": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 3,
+      "title": "Hashtags",
+      "type": "array"
+    },
+    "sources": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "topic",
+    "hook",
+    "scenes",
+    "hashtags"
+  ],
+  "title": "Script",
+  "type": "object"
+}

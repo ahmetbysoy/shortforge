@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shortforge"
+version = "0.1.0"
+description = "Ucretsiz katmanlarla dikey YouTube Shorts uretimi + denetimli (private -> onay -> public) yayin hatti"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "ahmetbysoy" }]
+dependencies = [
+  "typer==0.15.1",
+  "rich==13.9.4",
+  "pydantic==2.10.4",
+  "pydantic-settings==2.7.0",
+  "httpx==0.28.1",
+  "tenacity==9.0.0",
+  "structlog==24.4.0",
+  "python-dotenv==1.0.1",
+  "pillow==11.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.3.4",
+  "pytest-asyncio==0.25.0",
+  "respx==0.22.0",
+  "ruff==0.8.4",
+  "mypy==1.14.0",
+  "pre-commit==4.0.1",
+]
+
+[project.scripts]
+shortforge = "shortforge.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shortforge"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = false
+disallow_untyped_decorators = false
+mypy_path = "src"
+packages = ["shortforge"]
+
+[[tool.mypy.overrides]]
+module = ["edge_tts.*", "piper.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-m 'not live' --strict-markers"
+markers = ["live: aga cikan testler (varsayilan olarak kapali)"]

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: lint + type + test (py${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Bagimliliklari kur
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff (format + lint)
+        run: |
+          ruff format --check .
+          ruff check .
+
+      - name: mypy
+        run: mypy src
+
+      - name: Unit testler (ag yok)
+        run: pytest -m "not live" -q --maxfail=1
+
+      - name: Sir sizinti kontrolu
+        run: |
+          if grep -rInE "AIza[0-9A-Za-z_-]{30,}|ghp_[0-9A-Za-z]{30,}|ya29\." \
+               --include="*.py" --include="*.md" --include="*.yml" --include="*.toml" .; then
+            echo "::error::Depoda sir gorunumlu bir dize bulundu."
+            exit 1
+          fi
+          echo "Temiz: sir bulunamadi."

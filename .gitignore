@@ -1,0 +1,32 @@
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# secrets
+.env
+.env.*
+!.env.example
+client_secret*.json
+*token*.json
+
+# state & artifacts
+state/*
+out/*
+!state/.gitkeep
+!state/keepalive.txt
+!out/.gitkeep
+*.sqlite
+*.db
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
