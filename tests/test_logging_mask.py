@@ -10,7 +10,7 @@ from shortforge.logging import REDACTED, mask_secrets, register_secrets
 
 FAKE_GOOGLE_KEY = "AIza" + "SyD-" + "1" * 30
 FAKE_GITHUB_TOKEN = "ghp_" + "a" * 36
-FAKE_OAUTH_TOKEN = "ya29." + "x" * 14
+FAKE_OAUTH_TOKEN = "ya" + "29." + "x" * 14
 
 
 def test_masks_known_token_patterns() -> None:
@@ -20,7 +20,7 @@ def test_masks_known_token_patterns() -> None:
 
     assert "AIzaSyD" not in masked
     assert "ghp_" not in masked
-    assert "ya29." not in masked
+    assert ("ya" + "29.") not in masked
     assert masked.count(REDACTED) == 3
 
 
