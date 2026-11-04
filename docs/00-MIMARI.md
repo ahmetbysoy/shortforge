@@ -15,7 +15,7 @@
 | **Gerçek text-to-video** | **KAPSAM DIŞI** (ücretsiz API yok) | HF ücretsiz Inference kredileri 07.10.2026'da kaldırıldı; kalan "free" T2V'ler consumer web + filigran | — | Opsiyonel: self-host Wan/LTX (GPU gerekir) | Sıfır maliyetle üretimde sürdürülemez |
 | **Hareket / efekt** | FFmpeg `zoompan` (Ken Burns), parallax, `xfade` | Sınırsız, yerel | Yok | OpenCV kare üretimi | CPU süresi |
 | **Seslendirme (TTS)** | `edge-tts` (tr-TR Ahmet/Emel) | Ücretsiz, anahtarsız, resmî olmayan servis | Yok | **Piper** (MIT, offline, `tr_TR` modelleri) | GitHub Actions IP'lerinde 403/403-benzeri blok riski → yedek zorunlu |
-| **Altyazı zamanlaması** | `edge-tts` **WordBoundary** olayları (kelime bazlı, ASR gerekmez) | Ücretsiz | Yok | `faster-whisper` (CPU, int8, MIT) | edge-tts yedeğe düşerse ASR gerekir |
+| **Altyazı zamanlaması** | `edge-tts` **WordBoundary** olayları — `boundary="WordBoundary"` **zorunlu** (varsayılan `SentenceBoundary`), ASR gerekmez | Ücretsiz | Yok | `faster-whisper` (CPU, int8, MIT) | edge-tts yedeğe düşerse ASR gerekir |
 | **Altyazı yakma** | FFmpeg `ass` filtresi (burn-in) + `.srt` yedeği | Sınırsız | Yok | — | Font/emoji desteği |
 | **Müzik** | Openverse API (CC lisanslı, anahtarsız) | Ücretsiz, rate-limit'li | Yok | Repoya gömülü CC0 parça kütüphanesi (10–20 parça) | Lisans kaydı zorunlu |
 | **Kapak (thumbnail)** | PIL ile yerel kompozisyon | Sınırsız | Yok | — | — |

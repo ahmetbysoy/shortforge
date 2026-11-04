@@ -2,6 +2,16 @@
 
 Her satir: **karar — gerekce — risk**. Yeni kararlar en uste eklenir.
 
+## Cephanelik ölçümü (2026-11-04)
+
+19. **edge-tts 7.x'te `boundary="WordBoundary"` AÇIKÇA verilmeli** — varsayılan
+    `SentenceBoundary` ve cümle başına tek olay üretiyor; kelime senkron altyazı sessizce
+    cümle senkronuna düşerdi. Canlı test: 21 kelime olayı, `Antik @0.10s`, son kelime `@11.40s`
+    (ses 13.15s → sonda ~1.2 sn sessizlik telafi edilmeli). `tts_edge` health() bunu raporlar.
+20. **Tarayıcı otomasyonu altyapısı VAR ama consumer AI siteleri için YOK** — Playwright +
+    Chromium bu ortamda çalıştı (`install-deps` sonrası). Politika değişmedi (bkz. #9):
+    Kling/Runway/Pika/Sora arayüz otomasyonu ToS ihlali; yalnız izin verilen yerlerde kullanılır.
+
 ## P0.5 (2026-11-04) — ajan raporu denetimi ve birles.
 
 11. **Kota defterine `action` kolonu** (kabul) — "yukleme = birim/1600" turetimi kapak/guncelleme
