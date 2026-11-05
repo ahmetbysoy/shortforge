@@ -2,6 +2,23 @@
 
 Her satir: **karar — gerekce — risk**. Yeni kararlar en uste eklenir.
 
+## Faz 1 / OAuth (2026-11-04)
+
+21. **`run_console()` ve "oob" akisi kullanilmaz** — dogrulandi: `google-auth-oauthlib 1.5.0`
+    icinde `run_console` **yok** (kaldirildi) ve Google'in kopyala-yapistir (oob) akisi 2022'de
+    kapatildi. Yerine iki modlu tasarim: `--mode loopback` (tarayici ayni makinede) ve
+    **iki adimli `--auth-url` / `--exchange`** (headless).
+22. **PKCE nedeniyle yetkilendirme IKI ADIM** — akis `code_challenge` uretiyor; `code_verifier`
+    ayni surecte yasamak zorunda. Tek oturumda bekleyen bir proses mumkun olmadigi icin
+    verifier `.oauth_pending.json`'a (0600) yazilir, ikinci komut onu kullanir. Test:
+    verifier'in SHA256/base64url ozeti URL'deki `code_challenge` ile **birebir eslesiyor**.
+23. **Consent screen "In production" (unverified), "Testing" DEGIL** — Testing modunda Google
+    refresh_token'i **7 gunde** gecersiz kilar; 7/24 otomasyon bir hafta sonra sessizce olur.
+    Unverified production: uyari ekrani + 100 kullanici siniri, ama kalici token, ve
+    denetlenmemis proje oldugu icin yuklemeler zaten private kaliyor.
+24. **`upload_test.py` public yuklemeyi reddediyor** — `--privacy public` verilirse exit 2.
+    Onay akisi (Issue etiketi -> videos.update) P5'te gelecek; o zamana kadar tek yol private.
+
 ## Cephanelik ölçümü (2026-11-04)
 
 19. **edge-tts 7.x'te `boundary="WordBoundary"` AÇIKÇA verilmeli** — varsayılan

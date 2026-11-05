@@ -16,6 +16,7 @@ dist/
 !.env.example
 client_secret*.json
 *token*.json
+.oauth_pending.json
 
 # state & artifacts
 state/*
